@@ -1,11 +1,24 @@
-import * as React from "react";
+import * as React from 'react';
 
-export interface InputTextProps {
+type HTMLInputProps = React.ComponentPropsWithoutRef<'input'>;
+type HTMLInputRef = React.ElementRef<'input'>;
+
+export interface InputTextProps extends HTMLInputProps {
   value: string;
 }
 
-export function InputText({ value }: InputTextProps) {
-  return <input type="text" value={value} />;
-}
+export const InputText = React.forwardRef<HTMLInputRef, InputTextProps>(
+  (props: InputTextProps, forwardedRef: React.ForwardedRef<HTMLInputRef>) => {
+    const { value, ...passThroughProps } = props;
+    return (
+      <input
+        ref={forwardedRef}
+        type="text"
+        value={value}
+        {...passThroughProps}
+      />
+    );
+  },
+);
 
-InputText.displayName = "InputText";
+InputText.displayName = 'InputText';
