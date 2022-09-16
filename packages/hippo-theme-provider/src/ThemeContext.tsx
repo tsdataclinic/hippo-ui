@@ -8,7 +8,7 @@ export type ThemeAPI = {
   };
 };
 
-const defaultTheme: ThemeAPI = {
+export const defaultTheme: ThemeAPI = {
   paddings: {
     lg: 8,
     md: 4,
