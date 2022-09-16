@@ -1,6 +1,6 @@
 # Hippo UI
 
-An open-source UI component library tailored for social impact organizations with a focus around accessibility, flexibility, and reliability.
+An open-source UI component library tailored for social impact organizations with a focus on accessibility, flexibility, reliability, and lowering the barrier of entry to building beautiful UIs.
 
 ## Table of Contents
 
@@ -12,7 +12,7 @@ An open-source UI component library tailored for social impact organizations wit
 To get started:
 
 1. Install dependencies: `yarn install`
-1. Run storybook: `yarn dev`
+1. Run storybook and the test todo-app: `yarn dev`
 
 That's it!
 
@@ -23,6 +23,7 @@ This design system monorepo was set up using the [Turborepo Design System Starte
 This Turborepo includes the following packages and applications:
 
 - `apps/docs`: Component documentation site with Storybook
+- `apps/todo-app`: A test app to play around with the theme editor
 - `packages/@hippo-xxx`: Core React components. Each component is published as its own package.
 - `packages/@hippo-utils`: Shared React utilities
 - `packages/@hippo-tsconfig`: Shared `tsconfig.json` used throughout the Turborepo
