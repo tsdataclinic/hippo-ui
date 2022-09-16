@@ -2,6 +2,8 @@
 
 An open-source UI component library tailored for social impact organizations with a focus on accessibility, flexibility, reliability, and lowering the barrier of entry to building beautiful UIs.
 
+The name Hippo is inspired from the Hippocratic Oath. While this library can be used by anyone, it was built with nonprofits and other mission-driven organizations in mind. The name is an acknowledgement of these organization's goals to do no harm and deliver solutions to benefit society. Hippo UI's goal is to make frontend development easier for anyone looking to build UIs to help others.
+
 ## Table of Contents
 
 1. [Developing](#1-developing)
