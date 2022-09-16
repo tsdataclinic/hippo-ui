@@ -35,6 +35,15 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
           setFontSize: fontSize => {
             setThemeOverrides(v => ({ ...v, fontSize }));
           },
+          setPadding: (
+            paddingType: 'sm' | 'md' | 'lg',
+            paddingVal: number | string,
+          ) => {
+            setThemeOverrides(v => ({
+              ...v,
+              paddings: { ...v.paddings, [paddingType]: paddingVal },
+            }));
+          },
           registerComponentName: componentName => {
             setThemeOverrides(v => ({
               ...v,

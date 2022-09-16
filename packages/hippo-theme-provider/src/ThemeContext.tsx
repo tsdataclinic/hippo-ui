@@ -30,6 +30,10 @@ const context = {
   isThemeEditorOpen: false,
   setColor: (c: string) => {},
   setFontSize: (fs: number) => {},
+  setPadding: (
+    paddingType: 'sm' | 'md' | 'lg',
+    paddingVal: number | string,
+  ) => {},
   registerComponentName: (name: string) => {},
   setComponentSpecificConfigs: (name: string, configs: any) => {},
   highlightedComponents: [] as string[],

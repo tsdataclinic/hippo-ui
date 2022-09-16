@@ -8,6 +8,7 @@ export function ThemeEditor(): JSX.Element {
     setIsThemeEditorOpen,
     setColor,
     setFontSize,
+    setPadding,
     theme,
     setComponentSpecificConfigs,
     setHighlightedComponents,
@@ -127,6 +128,33 @@ export function ThemeEditor(): JSX.Element {
             />
           </span>
           <span style={{ marginLeft: 4 }}>{theme.fontSize}</span>
+        </div>
+
+        <div style={{ display: 'flex' }}>
+          <span>Padding - Small</span>
+          <span style={{ marginLeft: 8 }}>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value={theme.paddings.sm}
+              className="slider"
+              onChange={e => {
+                if (selectedComponentName) {
+                  setComponentSpecificConfigs(selectedComponentName, {
+                    paddings: {
+                      ...theme.componentSpecificConfigs[selectedComponentName]
+                        .paddings,
+                      sm: parseInt(e.target.value, 10),
+                    },
+                  });
+                } else {
+                  setPadding('sm', parseInt(e.target.value, 10));
+                }
+              }}
+            />
+          </span>
+          <span style={{ marginLeft: 4 }}>{theme.paddings.sm}</span>
         </div>
 
         {isDebugging && (
