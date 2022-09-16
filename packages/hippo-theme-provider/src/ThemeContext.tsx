@@ -26,8 +26,6 @@ export const defaultTheme: ThemeAPI = {
 
 const context = {
   theme: defaultTheme,
-  setIsThemeEditorOpen: (v: any) => {},
-  isThemeEditorOpen: false,
   setColor: (c: string) => {},
   setFontSize: (fs: number) => {},
   setPadding: (

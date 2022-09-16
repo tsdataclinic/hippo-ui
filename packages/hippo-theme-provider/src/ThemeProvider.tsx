@@ -1,9 +1,5 @@
-import { useState } from 'react';
 import * as React from 'react';
-import { GlobalHotKeys } from 'react-hotkeys';
-import StartButton from './StartButton';
 import { defaultTheme, type ThemeAPI, ThemeContext } from './ThemeContext';
-import { ThemeEditor } from './ThemeEditor';
 
 type Props = {
   children: React.ReactNode;
@@ -13,7 +9,7 @@ type Props = {
 const removeConfigFromAllComponentConfigs = (
   componentSpecificConfigs: any,
   toRemoveConfigName: string,
-) => {
+): Record<string, any> => {
   const componentNames = [...Object.keys(componentSpecificConfigs)];
   return componentNames.reduce((obj, name) => {
     const configs = componentSpecificConfigs[name];
@@ -24,23 +20,17 @@ const removeConfigFromAllComponentConfigs = (
 };
 
 export function ThemeProvider({ children, theme }: Props): JSX.Element {
-  // remove this eslint disable once setIsThemeEditorOpen is used
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  // const { setIsThemeEditorOpen, isThemeEditorOpen } =
-  //   useContext(ThemeEditorContext);
-  const [isThemeEditorOpen, setIsThemeEditorOpen] =
-    React.useState<boolean>(false);
-  const [themeOverrides, setThemeOverrides] = useState<Partial<ThemeAPI>>({});
-  const [highlightedComponents, setHighlightedComponents] = useState<string[]>(
-    [],
+  const [themeOverrides, setThemeOverrides] = React.useState<Partial<ThemeAPI>>(
+    {},
   );
+  const [highlightedComponents, setHighlightedComponents] = React.useState<
+    string[]
+  >([]);
 
   return (
     <>
       <ThemeContext.Provider
         value={{
-          setIsThemeEditorOpen,
-          isThemeEditorOpen,
           theme: { ...(theme ?? defaultTheme), ...themeOverrides },
           setColor: color => {
             setThemeOverrides(v => ({
@@ -66,10 +56,17 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
             paddingType: 'sm' | 'md' | 'lg',
             paddingVal: number | string,
           ) => {
-            setThemeOverrides(v => ({
-              ...v,
-              paddings: { ...(v.paddings ?? {}), [paddingType]: paddingVal },
-            }));
+            setThemeOverrides(v => {
+              const newPaddings = {
+                ...(v.paddings ?? defaultTheme.paddings),
+                [paddingType]: paddingVal,
+              };
+
+              return {
+                ...v,
+                paddings: newPaddings,
+              };
+            });
           },
           registerComponentName: componentName => {
             setThemeOverrides(v => ({
@@ -101,31 +98,7 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
           highlightedComponents,
         }}
       >
-        <GlobalHotKeys
-          keyMap={{
-            TOGGLE: 'e',
-          }}
-          handlers={{
-            TOGGLE: keyEvent => {
-              if (keyEvent) {
-                keyEvent.preventDefault();
-              }
-              setIsThemeEditorOpen((v: boolean) => !v);
-            },
-          }}
-        >
-          {children}
-        </GlobalHotKeys>
-
-        {isThemeEditorOpen ? (
-          <ThemeEditor />
-        ) : (
-          <StartButton
-            onClick={() => {
-              setIsThemeEditorOpen(true);
-            }}
-          />
-        )}
+        {children}
       </ThemeContext.Provider>
     </>
   );

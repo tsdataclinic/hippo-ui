@@ -24,9 +24,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@hippo/modal": "*",
-    "react-hotkeys": "^2.0.0"
   }
 }

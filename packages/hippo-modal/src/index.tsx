@@ -1,3 +1,4 @@
+import { ThemeContext } from '@hippo/theme-provider';
 import * as React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import styled, { keyframes } from 'styled-components';
@@ -23,14 +24,15 @@ const ModalOverlay = styled(Dialog.Overlay)`
   },
 `;
 
-const ModalContent = styled(Dialog.Content)`
+const ModalContent = styled(Dialog.Content)<{ padding: string | number }>`
   background: white;
   box-shadow: hsl(206 22% 7% / 35%) 0px 10px 38px -10px,
     hsl(206 22% 7% / 20%) 0px 10px 20px -15px;
   left: 50%;
-  maxheight: 85vh;
-  maxwidth: 450px;
-  padding: 25;
+  max-height: 85vh;
+  max-width: 450px;
+  padding: ${props =>
+    typeof props.padding === 'string' ? props.padding : props.padding + 'px'};
   position: fixed;
   top: 50%;
   transform: translate(-50%, -50%);
@@ -40,6 +42,8 @@ const ModalContent = styled(Dialog.Content)`
     outline: none;
   }
 `;
+
+const NAME = 'HippoModal';
 
 export function Modal({
   children,
@@ -56,11 +60,22 @@ export function Modal({
     [onDismiss],
   );
 
+  const { highlightedComponents, registerComponentName, theme } =
+    React.useContext(ThemeContext);
+  React.useEffect(() => {
+    console.log('Registering ' + NAME);
+    registerComponentName(NAME);
+  }, []);
+  const configs = theme.componentSpecificConfigs[NAME];
+  const isHighlighted = new Set(highlightedComponents).has(NAME);
+
+  console.log('padding', theme.paddings);
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <ModalOverlay />
-        <ModalContent className="testing">
+        <ModalContent className="testing" padding={theme.paddings.lg}>
           <Dialog.Title>{title}</Dialog.Title>
           {children}
           <Dialog.Close asChild>

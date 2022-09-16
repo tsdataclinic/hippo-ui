@@ -26,6 +26,7 @@
     "access": "public"
   },
   "dependencies": {
+    "@hippo/theme-provider": "*",
     "@radix-ui/react-dialog": "^1.0.0",
     "styled-components": "^5.3.5"
   }
