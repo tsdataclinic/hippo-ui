@@ -8,6 +8,7 @@ type HTMLButtonRef = React.ElementRef<'button'>;
 export interface ButtonProps extends HTMLButtonProps {
   children: React.ReactNode;
 }
+
 const NAME = 'HippoButton';
 export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   (props: ButtonProps, forwardedRef: React.ForwardedRef<HTMLButtonRef>) => {

@@ -5,9 +5,7 @@ import './App.css';
 
 function App() {
   const [todoItems, setTodoItems] = React.useState<readonly string[]>([]);
-  const [isModalOpen, setIsModalOpen] = React.useState(false);
   const [itemText, setItemText] = React.useState('');
-  const onModalToggleClick = () => setIsModalOpen(prev => !prev);
 
   const onAddItem = (item: string) => {
     setTodoItems(prevItems => prevItems.concat(item));
