@@ -21,8 +21,16 @@ export const InputText = React.forwardRef<HTMLInputRef, InputTextProps>(
     const inputRef = React.useRef<HTMLInputElement | null>(null);
     const composedRef = useComposedRefs(forwardedRef, inputRef);
     const { inputProps } = useTextField(props, composedRef);
+
     const { value, ...passThroughInputProps } = inputProps;
-    return <input {...passThroughInputProps} ref={forwardedRef} type="text" />;
+    return (
+      <input
+        value={value}
+        {...passThroughInputProps}
+        ref={forwardedRef}
+        type="text"
+      />
+    );
   },
 );
 

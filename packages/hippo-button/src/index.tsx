@@ -9,9 +9,9 @@ export interface ButtonProps extends HTMLButtonProps {
 
 export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   (props: ButtonProps, forwardedRef: React.ForwardedRef<HTMLButtonRef>) => {
-    const { children, ...passThroughProps } = props;
+    const { children, type, ...passThroughProps } = props;
     return (
-      <button ref={forwardedRef} {...passThroughProps}>
+      <button ref={forwardedRef} type={type ?? 'button'} {...passThroughProps}>
         {children}
       </button>
     );
