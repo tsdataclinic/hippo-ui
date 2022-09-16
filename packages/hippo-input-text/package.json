@@ -28,6 +28,7 @@
   },
   "dependencies": {
     "@react-aria/textfield": "^3.7.1",
+    "@hippo/theme-provider": "*",
     "@hippo/utils": "*"
   }
 }

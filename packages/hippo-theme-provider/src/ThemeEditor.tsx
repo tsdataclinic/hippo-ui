@@ -28,6 +28,7 @@ export function ThemeEditor(): JSX.Element {
       isOpen
       onDismiss={() => {
         setIsThemeEditorOpen(false);
+        setHighlightedComponents([]);
       }}
       title="Hippo Style Editor"
     >
@@ -63,6 +64,30 @@ export function ThemeEditor(): JSX.Element {
           )}
         </div>
         <hr />
+        <div style={{ width: '100%', textAlign: 'left', marginBottom: 8 }}>
+          <span>Apply style changes to </span>
+          <select
+            value={selectedComponentName}
+            onChange={ev => {
+              if (ev.target.value === 'all') {
+                setSelectedComponentName(undefined);
+              } else {
+                setSelectedComponentName(ev.target.value);
+              }
+            }}
+          >
+            <option value="all">Global</option>
+            {[...Object.keys(theme.componentSpecificConfigs)].map(
+              componentName => {
+                return (
+                  <option key={componentName} value={componentName}>
+                    {componentName}
+                  </option>
+                );
+              },
+            )}
+          </select>
+        </div>
         <div style={{ display: 'flex' }}>
           <span>Text Color</span>
           <span style={{ marginLeft: 8 }}>
@@ -70,7 +95,13 @@ export function ThemeEditor(): JSX.Element {
               type="color"
               value={theme.color}
               onChange={e => {
-                setColor(e.target.value);
+                if (selectedComponentName) {
+                  setComponentSpecificConfigs(selectedComponentName, {
+                    color: e.target.value,
+                  });
+                } else {
+                  setColor(e.target.value);
+                }
               }}
             />
           </span>
@@ -97,34 +128,14 @@ export function ThemeEditor(): JSX.Element {
           </span>
           <span style={{ marginLeft: 4 }}>{theme.fontSize}</span>
         </div>
-        <hr />
-        <div style={{ width: '100%', textAlign: 'left' }}>
-          <select
-            value={selectedComponentName}
-            onChange={ev => {
-              if (ev.target.value === 'all') {
-                setSelectedComponentName(undefined);
-              } else {
-                setSelectedComponentName(ev.target.value);
-              }
-            }}
-          >
-            <option value="all">--</option>
-            {[...Object.keys(theme.componentSpecificConfigs)].map(
-              componentName => {
-                return (
-                  <option key={componentName} value={componentName}>
-                    {componentName}
-                  </option>
-                );
-              },
-            )}
-          </select>
-        </div>
+
         {isDebugging && (
-          <pre style={{ width: '100%', textAlign: 'left' }}>
-            {JSON.stringify(theme, null, 2)}
-          </pre>
+          <>
+            <hr />
+            <pre style={{ width: '100%', textAlign: 'left' }}>
+              {JSON.stringify(theme, null, 2)}
+            </pre>
+          </>
         )}
         <button
           style={{ position: 'absolute', bottom: 0, right: 0 }}

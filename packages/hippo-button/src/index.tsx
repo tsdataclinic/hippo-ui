@@ -8,6 +8,7 @@ type HTMLButtonRef = React.ElementRef<'button'>;
 export interface ButtonProps extends HTMLButtonProps {
   children: React.ReactNode;
 }
+
 const NAME = 'HippoButton';
 export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   (props: ButtonProps, forwardedRef: React.ForwardedRef<HTMLButtonRef>) => {
@@ -31,6 +32,10 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
         style={{
           color: theme.color,
           fontSize: theme.fontSize,
+          paddingBottom: theme.paddings.sm,
+          paddingLeft: theme.paddings.md,
+          paddingRight: theme.paddings.md,
+          paddingTop: theme.paddings.sm,
           ...configs,
           backgroundColor: isHighlighted ? 'Yellow' : 'inherit',
         }}
@@ -41,4 +46,4 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   },
 );
 
-Button.displayName = 'Button';
+Button.displayName = 'HippoButton';

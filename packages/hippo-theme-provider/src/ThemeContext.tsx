@@ -2,9 +2,9 @@ import * as React from 'react';
 
 export type ThemeAPI = {
   paddings: {
-    lg: number;
-    md: number;
-    sm: number;
+    lg: number | string;
+    md: number | string;
+    sm: number | string;
   };
   color: string;
   fontSize: number;
@@ -15,9 +15,9 @@ export type ThemeAPI = {
 
 export const defaultTheme: ThemeAPI = {
   paddings: {
-    lg: 8,
-    md: 4,
-    sm: 2,
+    lg: '12px',
+    md: '8px',
+    sm: '4px',
   },
   color: 'blue',
   fontSize: 24,
