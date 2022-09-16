@@ -41,4 +41,4 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   },
 );
 
-Button.displayName = 'Button';
+Button.displayName = 'HippoButton';
