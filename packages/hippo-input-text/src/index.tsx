@@ -17,7 +17,7 @@ const NAME = 'HippoInputText';
 
 /**
  * An InputText component.
- * Is uncontrolled by default until a `value` is passed.
+ * Uncontrolled by default until a `value` is passed.
  */
 export const InputText = React.forwardRef<HTMLInputRef, InputTextProps>(
   (props: InputTextProps, forwardedRef: React.ForwardedRef<HTMLInputRef>) => {
@@ -45,6 +45,10 @@ export const InputText = React.forwardRef<HTMLInputRef, InputTextProps>(
         style={{
           color: theme.color,
           fontSize: theme.fontSize,
+          paddingBottom: theme.paddings.sm,
+          paddingLeft: theme.paddings.md,
+          paddingRight: theme.paddings.md,
+          paddingTop: theme.paddings.sm,
           ...configs,
           backgroundColor: isHighlighted ? 'Yellow' : 'inherit',
         }}

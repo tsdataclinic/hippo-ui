@@ -180,6 +180,68 @@ export function ThemeEditor(): JSX.Element {
           <span style={{ marginLeft: 4 }}>{theme.paddings.sm}</span>
         </div>
 
+        <div style={{ display: 'flex' }}>
+          <span>Padding - Medium</span>
+          <span style={{ marginLeft: 8 }}>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value={
+                typeof theme.paddings.md === 'string'
+                  ? parseInt(theme.paddings.md, 10)
+                  : theme.paddings.md
+              }
+              className="slider"
+              onChange={e => {
+                if (selectedComponentName) {
+                  setComponentSpecificConfigs(selectedComponentName, {
+                    paddings: {
+                      ...theme.componentSpecificConfigs[selectedComponentName]
+                        .paddings,
+                      md: parseInt(e.target.value, 10),
+                    },
+                  });
+                } else {
+                  setPadding('md', parseInt(e.target.value, 10));
+                }
+              }}
+            />
+          </span>
+          <span style={{ marginLeft: 4 }}>{theme.paddings.md}</span>
+        </div>
+
+        <div style={{ display: 'flex' }}>
+          <span>Padding - Large</span>
+          <span style={{ marginLeft: 8 }}>
+            <input
+              type="range"
+              min="1"
+              max="100"
+              value={
+                typeof theme.paddings.lg === 'string'
+                  ? parseInt(theme.paddings.lg, 10)
+                  : theme.paddings.lg
+              }
+              className="slider"
+              onChange={e => {
+                if (selectedComponentName) {
+                  setComponentSpecificConfigs(selectedComponentName, {
+                    paddings: {
+                      ...theme.componentSpecificConfigs[selectedComponentName]
+                        .paddings,
+                      lg: parseInt(e.target.value, 10),
+                    },
+                  });
+                } else {
+                  setPadding('lg', parseInt(e.target.value, 10));
+                }
+              }}
+            />
+          </span>
+          <span style={{ marginLeft: 4 }}>{theme.paddings.lg}</span>
+        </div>
+
         {isDebugging && (
           <>
             <hr />
