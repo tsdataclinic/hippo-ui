@@ -17,7 +17,6 @@ function App() {
     <div className="App">
       {todoItemRows}
       <form
-        style={{ position: 'absolute', top: 0 }}
         onSubmit={e => {
           e.preventDefault();
           onAddItem(itemText);
