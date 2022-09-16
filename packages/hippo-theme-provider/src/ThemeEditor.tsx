@@ -1,6 +1,6 @@
 import { Modal } from '@hippo/modal';
 import * as React from 'react';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import { ThemeContext } from './ThemeContext';
 
 export function ThemeEditor(): JSX.Element {
@@ -16,6 +16,13 @@ export function ThemeEditor(): JSX.Element {
   const [selectedComponentName, setSelectedComponentName] = useState<
     string | undefined
   >(undefined);
+  const selectedComponentConfig = useMemo(
+    () =>
+      (selectedComponentName &&
+        theme.componentSpecificConfigs[selectedComponentName]) ??
+      null,
+    [theme, selectedComponentName],
+  );
   const [isDebugging, setIsDebugging] = useState<boolean>(false);
   useEffect(() => {
     if (selectedComponentName) {
@@ -94,7 +101,11 @@ export function ThemeEditor(): JSX.Element {
           <span style={{ marginLeft: 8 }}>
             <input
               type="color"
-              value={theme.color}
+              value={
+                selectedComponentName
+                  ? selectedComponentConfig.color
+                  : theme.color
+              }
               onChange={e => {
                 if (selectedComponentName) {
                   setComponentSpecificConfigs(selectedComponentName, {
@@ -114,7 +125,11 @@ export function ThemeEditor(): JSX.Element {
               type="range"
               min="9"
               max="96"
-              value={theme.fontSize}
+              value={
+                selectedComponentName
+                  ? selectedComponentConfig.fontSize
+                  : theme.fontSize
+              }
               className="slider"
               onChange={e => {
                 if (selectedComponentName) {
@@ -127,7 +142,11 @@ export function ThemeEditor(): JSX.Element {
               }}
             />
           </span>
-          <span style={{ marginLeft: 4 }}>{theme.fontSize}</span>
+          <span style={{ marginLeft: 4 }}>
+            {selectedComponentName
+              ? selectedComponentConfig.fontSize
+              : theme.fontSize}
+          </span>
         </div>
 
         <div style={{ display: 'flex' }}>

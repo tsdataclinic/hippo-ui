@@ -10,6 +10,19 @@ type Props = {
   theme?: ThemeAPI;
 };
 
+const removeConfigFromAllComponentConfigs = (
+  componentSpecificConfigs: any,
+  toRemoveConfigName: string,
+) => {
+  const componentNames = [...Object.keys(componentSpecificConfigs)];
+  return componentNames.reduce((obj, name) => {
+    const configs = componentSpecificConfigs[name];
+    delete configs[toRemoveConfigName];
+    obj[name] = configs;
+    return obj;
+  }, {} as any);
+};
+
 export function ThemeProvider({ children, theme }: Props): JSX.Element {
   // remove this eslint disable once setIsThemeEditorOpen is used
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -30,10 +43,24 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
           isThemeEditorOpen,
           theme: { ...(theme ?? defaultTheme), ...themeOverrides },
           setColor: color => {
-            setThemeOverrides(v => ({ ...v, color }));
+            setThemeOverrides(v => ({
+              ...v,
+              color,
+              componentSpecificConfigs: removeConfigFromAllComponentConfigs(
+                v.componentSpecificConfigs,
+                'color',
+              ),
+            }));
           },
           setFontSize: fontSize => {
-            setThemeOverrides(v => ({ ...v, fontSize }));
+            setThemeOverrides(v => ({
+              ...v,
+              fontSize,
+              componentSpecificConfigs: removeConfigFromAllComponentConfigs(
+                v.componentSpecificConfigs,
+                'fontSize',
+              ),
+            }));
           },
           setPadding: (
             paddingType: 'sm' | 'md' | 'lg',
