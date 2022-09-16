@@ -1,5 +1,5 @@
-import { ThemeContext } from '@hippo/theme-provider';
 import React, { useContext, useEffect, useMemo } from 'react';
+import { ThemeContext } from './ThemeContext';
 
 interface IProps {}
 
