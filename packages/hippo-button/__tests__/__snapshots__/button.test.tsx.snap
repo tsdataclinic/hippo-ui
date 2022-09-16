@@ -1,13 +1,19 @@
 // Vitest Snapshot v1
 
 exports[`hippo-button > should render a single child as expected 1`] = `
-<button>
+<button
+  style="color: blue; font-size: 24px; background-color: inherit;"
+  type="button"
+>
   Inner Text
 </button>
 `;
 
 exports[`hippo-button > should render multiple children as expected 1`] = `
-<button>
+<button
+  style="color: blue; font-size: 24px; background-color: inherit;"
+  type="button"
+>
   <span>
     Child 1
   </span>
