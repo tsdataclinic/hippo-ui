@@ -28,6 +28,7 @@ export function ThemeEditor(): JSX.Element {
       isOpen
       onDismiss={() => {
         setIsThemeEditorOpen(false);
+        setHighlightedComponents([]);
       }}
       title="Hippo Style Editor"
     >
@@ -70,7 +71,13 @@ export function ThemeEditor(): JSX.Element {
               type="color"
               value={theme.color}
               onChange={e => {
-                setColor(e.target.value);
+                if (selectedComponentName) {
+                  setComponentSpecificConfigs(selectedComponentName, {
+                    color: e.target.value,
+                  });
+                } else {
+                  setColor(e.target.value);
+                }
               }}
             />
           </span>
