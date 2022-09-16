@@ -68,7 +68,7 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
           ) => {
             setThemeOverrides(v => ({
               ...v,
-              paddings: { ...v.paddings, [paddingType]: paddingVal },
+              paddings: { ...(v.paddings ?? {}), [paddingType]: paddingVal },
             }));
           },
           registerComponentName: componentName => {

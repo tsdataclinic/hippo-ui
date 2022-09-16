@@ -156,7 +156,11 @@ export function ThemeEditor(): JSX.Element {
               type="range"
               min="1"
               max="100"
-              value={theme.paddings.sm}
+              value={
+                typeof theme.paddings.sm === 'string'
+                  ? parseInt(theme.paddings.sm, 10)
+                  : theme.paddings.sm
+              }
               className="slider"
               onChange={e => {
                 if (selectedComponentName) {
