@@ -32,6 +32,10 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
         style={{
           color: theme.color,
           fontSize: theme.fontSize,
+          paddingBottom: theme.paddings.sm,
+          paddingLeft: theme.paddings.md,
+          paddingRight: theme.paddings.md,
+          paddingTop: theme.paddings.sm,
           ...configs,
           backgroundColor: isHighlighted ? 'Yellow' : 'inherit',
         }}
