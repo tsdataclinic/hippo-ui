@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { ThemeContext, type ThemeAPI } from './ThemeContext';
+import { ThemeContext, defaultTheme, type ThemeAPI } from './ThemeContext';
 import { ThemeEditor } from './ThemeEditor';
 
 type Props = {
   children: React.ReactNode;
-  theme: ThemeAPI;
+  theme?: ThemeAPI;
 };
 
 export function ThemeProvider({ children, theme }: Props): JSX.Element {
@@ -14,7 +14,9 @@ export function ThemeProvider({ children, theme }: Props): JSX.Element {
 
   return (
     <>
-      <ThemeContext.Provider value={theme}>{children}</ThemeContext.Provider>
+      <ThemeContext.Provider value={theme ?? defaultTheme}>
+        {children}
+      </ThemeContext.Provider>
       {isThemeEditorOpen ? <ThemeEditor /> : null}
     </>
   );
