@@ -28,6 +28,7 @@ export function ThemeEditor(): JSX.Element {
       isOpen
       onDismiss={() => {
         setIsThemeEditorOpen(false);
+        setHighlightedComponents([]);
       }}
       title="Hippo Style Editor"
     >
