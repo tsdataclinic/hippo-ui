@@ -24,5 +24,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@react-aria/textfield": "^3.7.1"
   }
 }
