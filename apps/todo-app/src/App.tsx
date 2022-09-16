@@ -31,7 +31,6 @@ function App() {
         <Button type="submit">Add item</Button>
       </form>
 
-      <Button onClick={onModalToggleClick}>Toggle modal</Button>
       <Modal
         isOpen={isModalOpen}
         onDismiss={() => setIsModalOpen(false)}
@@ -40,6 +39,7 @@ function App() {
         This is test content
       </Modal>
       <div style={{ position: 'absolute', top: 0 }}>
+        <Button onClick={onModalToggleClick}>Toggle modal</Button>
         <MyDiv />
         <div>
           <MyButton />
