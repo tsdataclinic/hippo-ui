@@ -19,6 +19,7 @@
     "@changesets/cli": "^2.22.0",
     "@testing-library/react": "^13.4.0",
     "@vitejs/plugin-react": "^2.1.0",
+    "@types/styled-components": "^5.1.26",
     "eslint": "^8.15.0",
     "eslint-config-hippo": "*",
     "jsdom": "^20.0.0",

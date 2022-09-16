@@ -1,5 +1,5 @@
 {
-  "name": "@hippo/utils",
+  "name": "@hippo/modal",
   "version": "0.0.0",
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
@@ -17,12 +17,16 @@
   },
   "devDependencies": {
     "@hippo/tsconfig": "*",
-    "@types/react": "^18.0.9",
+    "@types/react": "^18.0.20",
     "eslint": "^8.15.0",
     "eslint-config-hippo": "*",
-    "react": "^18.1.0"
+    "react": "^18.2.0"
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.0",
+    "styled-components": "^5.3.5"
   }
 }
