@@ -1,3 +1,4 @@
+import { MyDiv, MyButton } from '@hippo/theme-provider';
 import * as React from 'react';
 import { InputText } from '@hippo/input-text';
 import { Button } from '@hippo/button';
@@ -38,6 +39,12 @@ function App() {
       >
         This is test content
       </Modal>
+      <div style={{ position: 'absolute', top: 0 }}>
+        <MyDiv />
+        <div>
+          <MyButton />
+        </div>
+      </div>
     </div>
   );
 }
