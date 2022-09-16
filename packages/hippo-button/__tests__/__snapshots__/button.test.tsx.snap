@@ -2,7 +2,7 @@
 
 exports[`hippo-button > should render a single child as expected 1`] = `
 <button
-  style="color: blue; font-size: 24px; background-color: inherit;"
+  style="color: blue; font-size: 24px; padding: 2px 4px 2px 4px; background-color: inherit;"
   type="button"
 >
   Inner Text
@@ -11,7 +11,7 @@ exports[`hippo-button > should render a single child as expected 1`] = `
 
 exports[`hippo-button > should render multiple children as expected 1`] = `
 <button
-  style="color: blue; font-size: 24px; background-color: inherit;"
+  style="color: blue; font-size: 24px; padding: 2px 4px 2px 4px; background-color: inherit;"
   type="button"
 >
   <span>
