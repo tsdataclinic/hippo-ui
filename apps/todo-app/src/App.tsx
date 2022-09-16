@@ -3,6 +3,7 @@ import { InputText } from '@hippo/input-text';
 import { Button } from '@hippo/button';
 import { Modal } from '@hippo/modal';
 import './App.css';
+// import { MyDiv, MyButton } from '@hippo/theme-provider';
 
 function App() {
   const [isModalOpen, setIsModalOpen] = React.useState(false);
@@ -19,6 +20,10 @@ function App() {
       >
         This is test content
       </Modal>
+      {/*<MyDiv />*/}
+      {/*<div>*/}
+      {/*  <MyButton />*/}
+      {/*</div>*/}
     </div>
   );
 }
