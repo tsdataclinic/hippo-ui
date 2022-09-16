@@ -24,5 +24,8 @@
   },
   "publishConfig": {
     "access": "public"
+  },
+  "dependencies": {
+    "react-hotkeys": "^2.0.0"
   }
 }

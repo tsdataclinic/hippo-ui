@@ -3,6 +3,8 @@ import { InputText } from '@hippo/input-text';
 import { Button } from '@hippo/button';
 import { Modal } from '@hippo/modal';
 import './App.css';
+import MyDiv from './MyDiv';
+import MyButton from './MyButton';
 
 function App() {
   const [todoItems, setTodoItems] = React.useState<readonly string[]>([]);
@@ -38,6 +40,10 @@ function App() {
       >
         This is test content
       </Modal>
+      <MyDiv />
+      <div>
+        <MyButton />
+      </div>
     </div>
   );
 }
