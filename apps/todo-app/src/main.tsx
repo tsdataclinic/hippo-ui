@@ -9,7 +9,7 @@ ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <React.StrictMode>
     <ThemeProvider>
       <App />
-      <ThemeEditor />
+      {import.meta.env.DEV ? <ThemeEditor /> : <></>}
     </ThemeProvider>
   </React.StrictMode>,
 );
