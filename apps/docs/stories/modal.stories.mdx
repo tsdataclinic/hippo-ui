@@ -1,0 +1,38 @@
+import { useState } from 'react';
+import { Button } from '@hippo/button';
+import { Modal } from '@hippo/modal';
+import { Meta, Story, Canvas, ArgsTable } from '@storybook/addon-docs';
+
+<Meta title="Components/Modal" component={Modal} />
+
+# Modal
+
+This is a modal.
+
+## Props
+
+<ArgsTable of={Modal} />
+
+## Examples
+
+export const ModalTrigger = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  return (
+    <>
+      <Button onClick={() => setIsOpen(true)}>Hello!</Button>
+      <Modal
+        title="Test modal"
+        isOpen={isOpen}
+        onDismiss={() => setIsOpen(false)}
+      >
+        This is the modal content.
+      </Modal>
+    </>
+  );
+};
+
+<Canvas>
+  <Story name="Default">
+    <ModalTrigger />
+  </Story>
+</Canvas>
