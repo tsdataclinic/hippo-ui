@@ -17,6 +17,7 @@
   },
   "devDependencies": {
     "@hippo/tsconfig": "*",
+    "@hippo/utils": "*",
     "@types/react": "^18.0.20",
     "eslint": "^8.15.0",
     "eslint-config-hippo": "*",

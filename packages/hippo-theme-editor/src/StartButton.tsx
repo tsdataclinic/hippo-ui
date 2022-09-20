@@ -5,8 +5,9 @@ export default function StartButton({
 }: {
   onClick: () => void;
 }): JSX.Element {
+  // TODO: make this visible again once we have a better styling for it
   return (
-    <div style={{ position: 'absolute', bottom: 0, right: 0 }}>
+    <div style={{ display: 'none', position: 'absolute', bottom: 0, right: 0 }}>
       <button onClick={onClick}>Start</button>
     </div>
   );

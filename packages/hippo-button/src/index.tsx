@@ -1,5 +1,4 @@
-import { ThemeContext } from '@hippo/theme-provider';
-import { useContext, useEffect } from 'react';
+import { useComponentInTheme } from '@hippo/theme-provider';
 import * as React from 'react';
 
 type HTMLButtonProps = React.ComponentPropsWithoutRef<'button'>;
@@ -9,20 +8,13 @@ export interface ButtonProps extends HTMLButtonProps {
   children: React.ReactNode;
 }
 
-const NAME = 'HippoButton';
+const COMPONENT_NAME = 'HippoButton';
+
 export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   (props: ButtonProps, forwardedRef: React.ForwardedRef<HTMLButtonRef>) => {
     const { children, type, ...passThroughProps } = props;
-
-    const { highlightedComponents, registerComponentName, theme } =
-      useContext(ThemeContext);
-
-    useEffect(() => {
-      console.log('Registering ' + NAME);
-      registerComponentName(NAME);
-    }, []);
-    const configs = theme.componentSpecificConfigs[NAME];
-    const isHighlighted = new Set(highlightedComponents).has(NAME);
+    const { componentTheme, isHighlighted } =
+      useComponentInTheme(COMPONENT_NAME);
 
     return (
       <button
@@ -30,14 +22,19 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
         type={type ?? 'button'}
         {...passThroughProps}
         style={{
-          color: theme.color,
-          fontSize: theme.fontSize,
-          paddingBottom: theme.paddings.sm,
-          paddingLeft: theme.paddings.md,
-          paddingRight: theme.paddings.md,
-          paddingTop: theme.paddings.sm,
-          ...configs,
-          backgroundColor: isHighlighted ? 'Yellow' : 'inherit',
+          cursor: 'pointer',
+          backgroundColor: isHighlighted
+            ? 'Yellow'
+            : componentTheme.colors.primary,
+          borderRadius: componentTheme.borderRadiuses.normal,
+          borderWidth: componentTheme.borderWidths.none,
+          color: componentTheme.colors.text,
+          fontSize: componentTheme.fontSizes.base.fontSize,
+          lineHeight: componentTheme.fontSizes.base.lineHeight,
+          paddingBottom: componentTheme.paddings.small,
+          paddingLeft: componentTheme.paddings.medium,
+          paddingRight: componentTheme.paddings.medium,
+          paddingTop: componentTheme.paddings.small,
         }}
       >
         {children}
@@ -46,4 +43,4 @@ export const Button = React.forwardRef<HTMLButtonRef, ButtonProps>(
   },
 );
 
-Button.displayName = 'HippoButton';
+Button.displayName = COMPONENT_NAME;

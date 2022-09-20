@@ -11,14 +11,7 @@ module.exports = {
     'turbo',
     'prettier',
   ],
-  plugins: [
-    '@typescript-eslint',
-    'react-hooks',
-    'import',
-    'sort-destructure-keys',
-    'sort-keys-fix',
-    'jsx-a11y',
-  ],
+  plugins: ['@typescript-eslint', 'react-hooks', 'import', 'jsx-a11y'],
   rules: {
     '@typescript-eslint/array-type': ['error', { default: 'array-simple' }],
     '@typescript-eslint/explicit-function-return-type': [
@@ -73,11 +66,6 @@ module.exports = {
     ],
     'no-unused-vars': 'off',
     'no-shadow': 'off',
-    'sort-destructure-keys/sort-destructure-keys': [
-      'error',
-      { caseSensitive: false },
-    ],
-    'sort-keys-fix/sort-keys-fix': ['error', 'asc'],
   },
   settings: {
     'import/parsers': {

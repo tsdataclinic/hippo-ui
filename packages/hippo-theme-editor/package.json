@@ -15,6 +15,12 @@
     "lint": "TIMING=1 eslint src/**/*.ts* --fix",
     "clean": "rm -rf .turbo && rm -rf node_modules && rm -rf dist"
   },
+  "dependencies": {
+    "@hippo/button": "*",
+    "@hippo/modal": "*",
+    "@hippo/theme-provider": "*",
+    "react-hotkeys": "^2.0.0"
+  },
   "devDependencies": {
     "@hippo/tsconfig": "*",
     "@types/react": "^18.0.20",
@@ -24,10 +30,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "dependencies": {
-    "@hippo/modal": "*",
-    "@hippo/theme-provider": "*",
-    "react-hotkeys": "^2.0.0"
   }
 }

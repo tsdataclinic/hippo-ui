@@ -1,4 +1,4 @@
-import { ThemeContext } from '@hippo/theme-provider';
+import { useComponentInTheme } from '@hippo/theme-provider';
 import * as React from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import styled, { keyframes } from 'styled-components';
@@ -43,7 +43,7 @@ const ModalContent = styled(Dialog.Content)<{ padding: string | number }>`
   }
 `;
 
-const NAME = 'HippoModal';
+const COMPONENT_NAME = 'HippoModal';
 
 export function Modal({
   children,
@@ -59,23 +59,13 @@ export function Modal({
     },
     [onDismiss],
   );
-
-  const { highlightedComponents, registerComponentName, theme } =
-    React.useContext(ThemeContext);
-  React.useEffect(() => {
-    console.log('Registering ' + NAME);
-    registerComponentName(NAME);
-  }, []);
-  const configs = theme.componentSpecificConfigs[NAME];
-  const isHighlighted = new Set(highlightedComponents).has(NAME);
-
-  console.log('padding', theme.paddings);
+  const { componentTheme } = useComponentInTheme(COMPONENT_NAME);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={onOpenChange}>
       <Dialog.Portal>
         <ModalOverlay />
-        <ModalContent className="testing" padding={theme.paddings.lg}>
+        <ModalContent padding={componentTheme.paddings.large}>
           <Dialog.Title>{title}</Dialog.Title>
           {children}
           <Dialog.Close asChild>
@@ -87,4 +77,4 @@ export function Modal({
   );
 }
 
-Modal.displayName = 'Modal';
+Modal.displayName = COMPONENT_NAME;

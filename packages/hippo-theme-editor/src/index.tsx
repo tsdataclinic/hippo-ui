@@ -1,39 +1,47 @@
-import { ThemeContext } from '@hippo/theme-provider';
+import * as React from 'react';
+import { useTheme, useThemeDispatch } from '@hippo/theme-provider';
 import { Modal } from '@hippo/modal';
 import { GlobalHotKeys } from 'react-hotkeys';
-import * as React from 'react';
+import { Button } from '@hippo/button';
+import type { ThemeAttribute } from '@hippo/theme-provider';
+import RegisteredComponents from './RegisteredComponents';
 import StartButton from './StartButton';
+import ComponentSelector from './ComponentSelector';
+import ThemeAttributeSelector from './ThemeAttributeSelector';
+import ThemeAttributeEditor from './ThemeAttributeEditor';
 
 export function ThemeEditor(): JSX.Element {
-  const [isThemeEditorOpen, setIsThemeEditorOpen] =
-    React.useState<boolean>(false);
+  const { componentThemeOverrides, computedTheme, theme } = useTheme();
+  const registeredComponentNames = React.useMemo(
+    () => Object.keys(componentThemeOverrides),
+    [componentThemeOverrides],
+  );
 
-  const {
-    setColor,
-    setFontSize,
-    setPadding,
-    theme,
-    setComponentSpecificConfigs,
-    setHighlightedComponents,
-  } = React.useContext(ThemeContext);
+  const dispatch = useThemeDispatch();
+
+  const [isThemeEditorOpen, setIsThemeEditorOpen] = React.useState(false);
+  const [copiedThemeToClipboard, setCopiedThemeToClipboard] =
+    React.useState(false);
+
+  // an 'undefined' selection means we are editing the global theme
   const [selectedComponentName, setSelectedComponentName] = React.useState<
     string | undefined
   >(undefined);
-  const selectedComponentConfig = React.useMemo(
-    () =>
-      (selectedComponentName &&
-        theme.componentSpecificConfigs[selectedComponentName]) ??
-      null,
-    [theme, selectedComponentName],
-  );
+
+  const [themeAttribute, setThemeAttribute] =
+    React.useState<ThemeAttribute>('colors');
+
   const [isDebugging, setIsDebugging] = React.useState<boolean>(false);
-  React.useEffect(() => {
-    if (selectedComponentName) {
-      setHighlightedComponents([selectedComponentName]);
-    } else {
-      setHighlightedComponents([]);
-    }
-  }, [selectedComponentName]);
+
+  const updateHighlightedComponents = React.useCallback(
+    (components: string[]) => {
+      dispatch({
+        highlightedComponents: components,
+        type: 'HIGHLIGHTED_COMPONENTS_SET',
+      });
+    },
+    [dispatch],
+  );
 
   return (
     <>
@@ -54,7 +62,7 @@ export function ThemeEditor(): JSX.Element {
         isOpen={isThemeEditorOpen}
         onDismiss={() => {
           setIsThemeEditorOpen(false);
-          setHighlightedComponents([]);
+          updateHighlightedComponents([]);
         }}
         title="Hippo Style Editor"
       >
@@ -65,217 +73,75 @@ export function ThemeEditor(): JSX.Element {
             position: 'relative',
           }}
         >
-          <div style={{ width: '100%', textAlign: 'left' }}>
-            Registered components:{' '}
-            {[...Object.keys(theme.componentSpecificConfigs)].map(
-              (name, index) => {
-                const config = theme.componentSpecificConfigs[name];
-                return (
-                  <span key={name}>
-                    {index !== 0 && <span style={{ marginRight: 2 }}>,</span>}
-                    <span
-                      style={{ color: 'teal' }}
-                      onMouseEnter={() => {
-                        if (!selectedComponentName) {
-                          setHighlightedComponents([name]);
-                        }
-                      }}
-                      onMouseLeave={() => {
-                        if (!selectedComponentName) {
-                          setHighlightedComponents([]);
-                        }
-                      }}
-                    >
-                      {name}
-                    </span>
-                  </span>
-                );
-              },
-            )}
+          <div style={{ textAlign: 'left', width: '100%' }}>
+            <RegisteredComponents
+              componentNames={registeredComponentNames}
+              onUpdateHighlightedComponent={componentName =>
+                updateHighlightedComponents([componentName])
+              }
+              onClearHighlightedComponent={() =>
+                updateHighlightedComponents([])
+              }
+            />
           </div>
           <hr />
-          <div style={{ width: '100%', textAlign: 'left', marginBottom: 8 }}>
-            <span>Apply style changes to </span>
-            <select
+          <div
+            style={{
+              marginBottom: computedTheme.paddings.medium,
+              textAlign: 'left',
+              width: '100%',
+            }}
+          >
+            <ComponentSelector
+              componentNames={registeredComponentNames}
+              onChange={setSelectedComponentName}
               value={selectedComponentName}
-              onChange={ev => {
-                if (ev.target.value === 'all') {
-                  setSelectedComponentName(undefined);
-                } else {
-                  setSelectedComponentName(ev.target.value);
-                }
-              }}
-            >
-              <option value="all">Global</option>
-              {[...Object.keys(theme.componentSpecificConfigs)].map(
-                componentName => {
-                  return (
-                    <option key={componentName} value={componentName}>
-                      {componentName}
-                    </option>
-                  );
-                },
-              )}
-            </select>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <span>Text Color</span>
-            <span style={{ marginLeft: 8 }}>
-              <input
-                type="color"
-                value={
-                  selectedComponentName
-                    ? selectedComponentConfig.color
-                    : theme.color
-                }
-                onChange={e => {
-                  if (selectedComponentName) {
-                    setComponentSpecificConfigs(selectedComponentName, {
-                      color: e.target.value,
-                    });
-                  } else {
-                    setColor(e.target.value);
-                  }
-                }}
-              />
-            </span>
-          </div>
-          <div style={{ display: 'flex' }}>
-            <span>Font Size</span>
-            <span style={{ marginLeft: 8 }}>
-              <input
-                type="range"
-                min="9"
-                max="96"
-                value={
-                  selectedComponentName
-                    ? selectedComponentConfig.fontSize
-                    : theme.fontSize
-                }
-                className="slider"
-                onChange={e => {
-                  if (selectedComponentName) {
-                    setComponentSpecificConfigs(selectedComponentName, {
-                      fontSize: parseInt(e.target.value, 10),
-                    });
-                  } else {
-                    setFontSize(parseInt(e.target.value, 10));
-                  }
-                }}
-              />
-            </span>
-            <span style={{ marginLeft: 4 }}>
-              {selectedComponentName
-                ? selectedComponentConfig.fontSize
-                : theme.fontSize}
-            </span>
+            />
           </div>
 
-          <div style={{ display: 'flex' }}>
-            <span>Padding - Small</span>
-            <span style={{ marginLeft: 8 }}>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value={
-                  typeof theme.paddings.sm === 'string'
-                    ? parseInt(theme.paddings.sm, 10)
-                    : theme.paddings.sm
-                }
-                className="slider"
-                onChange={e => {
-                  if (selectedComponentName) {
-                    setComponentSpecificConfigs(selectedComponentName, {
-                      paddings: {
-                        ...theme.componentSpecificConfigs[selectedComponentName]
-                          .paddings,
-                        sm: parseInt(e.target.value, 10),
-                      },
-                    });
-                  } else {
-                    setPadding('sm', parseInt(e.target.value, 10));
-                  }
-                }}
-              />
-            </span>
-            <span style={{ marginLeft: 4 }}>{theme.paddings.sm}</span>
-          </div>
+          <ThemeAttributeSelector
+            onChange={setThemeAttribute}
+            value={themeAttribute}
+          />
 
-          <div style={{ display: 'flex' }}>
-            <span>Padding - Medium</span>
-            <span style={{ marginLeft: 8 }}>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value={
-                  typeof theme.paddings.md === 'string'
-                    ? parseInt(theme.paddings.md, 10)
-                    : theme.paddings.md
-                }
-                className="slider"
-                onChange={e => {
-                  if (selectedComponentName) {
-                    setComponentSpecificConfigs(selectedComponentName, {
-                      paddings: {
-                        ...theme.componentSpecificConfigs[selectedComponentName]
-                          .paddings,
-                        md: parseInt(e.target.value, 10),
-                      },
-                    });
-                  } else {
-                    setPadding('md', parseInt(e.target.value, 10));
-                  }
-                }}
-              />
-            </span>
-            <span style={{ marginLeft: 4 }}>{theme.paddings.md}</span>
-          </div>
-
-          <div style={{ display: 'flex' }}>
-            <span>Padding - Large</span>
-            <span style={{ marginLeft: 8 }}>
-              <input
-                type="range"
-                min="1"
-                max="100"
-                value={
-                  typeof theme.paddings.lg === 'string'
-                    ? parseInt(theme.paddings.lg, 10)
-                    : theme.paddings.lg
-                }
-                className="slider"
-                onChange={e => {
-                  if (selectedComponentName) {
-                    setComponentSpecificConfigs(selectedComponentName, {
-                      paddings: {
-                        ...theme.componentSpecificConfigs[selectedComponentName]
-                          .paddings,
-                        lg: parseInt(e.target.value, 10),
-                      },
-                    });
-                  } else {
-                    setPadding('lg', parseInt(e.target.value, 10));
-                  }
-                }}
-              />
-            </span>
-            <span style={{ marginLeft: 4 }}>{theme.paddings.lg}</span>
-          </div>
+          <ThemeAttributeEditor
+            themeAttribute={themeAttribute}
+            selectedComponentName={selectedComponentName}
+          />
 
           {isDebugging && (
             <>
               <hr />
-              <pre style={{ width: '100%', textAlign: 'left' }}>
+              <Button
+                onClick={() => {
+                  navigator.clipboard.writeText(JSON.stringify(theme, null, 2));
+                  setCopiedThemeToClipboard(true);
+                }}
+              >
+                Copy to clipboard
+              </Button>
+              {copiedThemeToClipboard ? (
+                <span style={{ paddingLeft: computedTheme.paddings.medium }}>
+                  Copied!
+                </span>
+              ) : null}
+              <pre
+                style={{
+                  textAlign: 'left',
+                  width: '100%',
+                  overflow: 'scroll',
+                  height: 200,
+                }}
+              >
                 {JSON.stringify(theme, null, 2)}
               </pre>
             </>
           )}
           <button
-            style={{ position: 'absolute', bottom: 0, right: 0 }}
+            style={{ bottom: 0, position: 'absolute', right: 0 }}
             onClick={() => {
               setIsDebugging(v => !v);
+              setCopiedThemeToClipboard(false);
             }}
           >
             Debug

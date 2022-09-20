@@ -1,105 +1,64 @@
 import * as React from 'react';
-import { defaultTheme, type ThemeAPI, ThemeContext } from './ThemeContext';
+import type { Theme } from './types';
+import { computeTheme } from './computeTheme';
+import { ThemeDispatch, themeActionReducer } from './ThemeDispatch';
+import {
+  ThemeContext,
+  ThemeOverrides,
+  initThemeContextState,
+  type ThemeConfig,
+  type ComputedTheme,
+} from './ThemeContext';
 
 type Props = {
   children: React.ReactNode;
-  theme?: ThemeAPI;
+  theme?: ThemeConfig;
 };
 
-const removeConfigFromAllComponentConfigs = (
-  componentSpecificConfigs: any,
-  toRemoveConfigName: string,
-): Record<string, any> => {
-  const componentNames = [...Object.keys(componentSpecificConfigs)];
-  return componentNames.reduce((obj, name) => {
-    const configs = componentSpecificConfigs[name];
-    delete configs[toRemoveConfigName];
-    obj[name] = configs;
-    return obj;
-  }, {} as any);
-};
+function computeComponentThemes(
+  globalTheme: Theme,
+  componentOverrides: { [componentName: string]: ThemeOverrides },
+): { [componentName: string]: ComputedTheme } {
+  const newComponentEntries = Object.entries(componentOverrides).map(
+    ([componentName, themeOverrides]) => {
+      return [componentName, computeTheme(globalTheme, themeOverrides)];
+    },
+  );
+
+  return Object.fromEntries(newComponentEntries);
+}
 
 export function ThemeProvider({ children, theme }: Props): JSX.Element {
-  const [themeOverrides, setThemeOverrides] = React.useState<Partial<ThemeAPI>>(
-    {},
+  const [themeContextState, dispatch] = React.useReducer(
+    themeActionReducer,
+    theme,
+    initThemeContextState,
   );
-  const [highlightedComponents, setHighlightedComponents] = React.useState<
-    string[]
-  >([]);
+
+  const { componentThemeOverrides, theme: globalTheme } = themeContextState;
+
+  // whenever the global theme or component-specific overrides get updated, then
+  // we should recompute the theme
+  React.useEffect(() => {
+    const computedGlobalTheme = computeTheme(globalTheme);
+    const computedComponentThemes = computeComponentThemes(
+      globalTheme,
+      componentThemeOverrides,
+    );
+    dispatch({
+      computedComponentThemes,
+      computedGlobalTheme,
+      type: 'COMPUTED_THEMES_UPDATE',
+    });
+  }, [globalTheme, componentThemeOverrides]);
 
   return (
     <>
-      <ThemeContext.Provider
-        value={{
-          theme: { ...(theme ?? defaultTheme), ...themeOverrides },
-          setColor: color => {
-            setThemeOverrides(v => ({
-              ...v,
-              color,
-              componentSpecificConfigs: removeConfigFromAllComponentConfigs(
-                v.componentSpecificConfigs,
-                'color',
-              ),
-            }));
-          },
-          setFontSize: fontSize => {
-            setThemeOverrides(v => ({
-              ...v,
-              fontSize,
-              componentSpecificConfigs: removeConfigFromAllComponentConfigs(
-                v.componentSpecificConfigs,
-                'fontSize',
-              ),
-            }));
-          },
-          setPadding: (
-            paddingType: 'sm' | 'md' | 'lg',
-            paddingVal: number | string,
-          ) => {
-            setThemeOverrides(v => {
-              const newPaddings = {
-                ...(v.paddings ?? defaultTheme.paddings),
-                [paddingType]: paddingVal,
-              };
-
-              return {
-                ...v,
-                paddings: newPaddings,
-              };
-            });
-          },
-          registerComponentName: componentName => {
-            setThemeOverrides(v => ({
-              ...v,
-              componentSpecificConfigs: {
-                ...v.componentSpecificConfigs,
-                [componentName]: {},
-              },
-            }));
-          },
-          setComponentSpecificConfigs: (
-            componentName: string,
-            configs: any,
-          ) => {
-            setThemeOverrides(v => ({
-              ...v,
-              componentSpecificConfigs: {
-                ...v.componentSpecificConfigs,
-                [componentName]: {
-                  ...(v.componentSpecificConfigs
-                    ? v.componentSpecificConfigs[componentName]
-                    : {}),
-                  ...configs,
-                },
-              },
-            }));
-          },
-          setHighlightedComponents,
-          highlightedComponents,
-        }}
-      >
-        {children}
-      </ThemeContext.Provider>
+      <ThemeDispatch.Provider value={dispatch}>
+        <ThemeContext.Provider value={themeContextState}>
+          {children}
+        </ThemeContext.Provider>
+      </ThemeDispatch.Provider>
     </>
   );
 }
