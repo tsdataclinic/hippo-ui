@@ -60,7 +60,7 @@ module.exports = {
           order: 'ignore',
           caseInsensitive: true,
         },
-        groups: [['builtin', 'external'], 'internal', 'type'],
+        groups: [['builtin', 'external'], 'internal'],
         'newlines-between': 'never',
       },
     ],
